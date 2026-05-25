@@ -1,32 +1,38 @@
 const express = require('express');
+
 const path = require('path');
 
 const app = express();
 
 app.use(express.json());
 
-/* Serve HTML/CSS/JS */
+/* Static Files */
 app.use(express.static(__dirname));
 
-/* Home Route */
+/* Homepage */
 app.get('/', (req, res) => {
+
     res.sendFile(path.join(__dirname, 'haba.html'));
+
 });
 
-/* API Route */
+/* API */
 app.post('/users', (req, res) => {
 
-    const data = req.body;
-
-    console.log(data);
+    console.log(req.body);
 
     res.json({
-        success: true,
-        received: data
+        success:true,
+        received:req.body
     });
+
 });
 
-/* Start Server */
-app.listen(3000, () => {
-    console.log('Server running on port 3000');
+/* Render Port */
+const PORT = process.env.PORT || 3000;
+
+app.listen(PORT, () => {
+
+    console.log(`Server running on port ${PORT}`);
+
 });
