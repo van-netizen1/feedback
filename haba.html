@@ -32,15 +32,13 @@
 
     <h3>Submit Feedback (Anonymous)</h3>
 
-    <form action="save_feedback.php" method="POST">
+    <textarea id="input" placeholder="Write your feedback here..."></textarea>
 
-<textarea name="message" placeholder="Write your feedback here..."></textarea>
+    <br>
 
-<br><br>
-
-<button type="submit">Post Feedback</button>
-
-</form>
+    <button onclick="addFeedback()">
+        Post Feedback
+    </button>
 
     <!-- Feedback Wall -->
     <div id="wall"></div>
