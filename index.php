@@ -32,13 +32,17 @@
 
     <h3>Submit Feedback (Anonymous)</h3>
 
-    <textarea id="input" placeholder="Write your feedback here..."></textarea>
+    <form action="save_feedback.php" method="POST">
 
-    <br>
+<textarea name="feedback" placeholder="Write your feedback here..." required></textarea>
 
-    <button onclick="addFeedback()">
-        Post Feedback
-    </button>
+<br><br>
+
+<button type="submit">
+    Post Feedback
+</button>
+
+</form>
 
     <!-- Feedback Wall -->
     <div id="wall"></div>
@@ -87,18 +91,39 @@ function addFeedback(){
     if(text === ""){
 
         alert("Please enter feedback.");
-
         return;
-
     }
 
-    let fb = new Feedback(Date.now(), text);
+    fetch("submit.php", {
 
-    feedbackList.push(fb);
+        method: "POST",
 
-    document.getElementById("input").value = "";
+        headers: {
+            "Content-Type": "application/x-www-form-urlencoded"
+        },
 
-    displayFeedback();
+        body: "content=" + encodeURIComponent(text)
+
+    })
+
+    .then(response => response.text())
+
+    .then(data => {
+
+        if(data === "success"){
+
+            alert("Feedback Posted!");
+
+            document.getElementById("input").value = "";
+
+        }
+        else{
+
+            alert("Error saving feedback.");
+
+        }
+
+    });
 
 }
 
