@@ -1,11 +1,4 @@
- <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Anonymous Class Feedback Wall</title>
-
-<link rel="stylesheet" href="feedback.css">
-</head>
- <!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 
 <head>
@@ -34,183 +27,45 @@
 
     <form action="save_feedback.php" method="POST">
 
-<textarea name="feedback" placeholder="Write your feedback here..." required></textarea>
+        <input type="text"
+               name="name"
+               placeholder="Your Name">
 
-<br><br>
+        <br><br>
 
-<button type="submit">
-    Post Feedback
-</button>
+        <textarea name="message"
+                  placeholder="Write your feedback here..."
+                  required></textarea>
 
-</form>
+        <br><br>
 
-    <!-- Feedback Wall -->
-    <div id="wall"></div>
-
-    <!-- Admin -->
-    <div class="admin-panel">
-
-        <h3>Admin Panel</h3>
-
-        <button onclick="toggleAdmin()">
-            Login as Admin
+        <button type="submit">
+            Post Feedback
         </button>
 
-    </div>
+    </form>
+
+   <!-- Admin -->
+<div class="admin-panel">
+
+    <h3>Admin Panel</h3>
+
+    <form action="admin_login.php" method="POST">
+
+        <input type="text" name="username" placeholder="Username" required>
+
+        <br><br>
+
+        <input type="password" name="password" placeholder="Password" required>
+
+        <br><br>
+
+        <button type="submit">Login as Admin</button>
+
+    </form>
 
 </div>
 
-<script>
-
-let feedbackList = [];
-
-let adminMode = false;
-
-/* Feedback Class */
-class Feedback{
-
-    constructor(id, content){
-
-        this.feedbackID = id;
-
-        this.content = content;
-
-        this.timestamp = new Date();
-
-        this.status = "visible";
-
-    }
-
-}
-
-/* Add Feedback */
-function addFeedback(){
-
-    let text = document.getElementById("input").value.trim();
-
-    if(text === ""){
-
-        alert("Please enter feedback.");
-        return;
-    }
-
-    fetch("submit.php", {
-
-        method: "POST",
-
-        headers: {
-            "Content-Type": "application/x-www-form-urlencoded"
-        },
-
-        body: "content=" + encodeURIComponent(text)
-
-    })
-
-    .then(response => response.text())
-
-    .then(data => {
-
-        if(data === "success"){
-
-            alert("Feedback Posted!");
-
-            document.getElementById("input").value = "";
-
-        }
-        else{
-
-            alert("Error saving feedback.");
-
-        }
-
-    });
-
-}
-
-/* Display Feedback */
-function displayFeedback(){
-
-    let wall = document.getElementById("wall");
-
-    wall.innerHTML = "";
-
-    feedbackList.forEach(fb => {
-
-        if(fb.status === "hidden" && !adminMode){
-
-            return;
-
-        }
-
-        let div = document.createElement("div");
-
-        div.className = "feedback";
-
-        div.innerHTML = `
-
-            <p>${fb.content}</p>
-
-            <div class="meta">
-
-                ${new Date(fb.timestamp).toLocaleString()}
-
-                | Status: ${fb.status}
-
-            </div>
-
-            ${adminMode ? <button onclick="moderate(${fb.feedbackID})">Hide</button> : ""}
-
-        `;
-
-        wall.prepend(div);
-
-    });
-
-}
-
-/* Hide Feedback */
-function moderate(id){
-
-    let fb = feedbackList.find(item => item.feedbackID === id);
-
-    if(fb){
-
-        fb.status = "hidden";
-
-        displayFeedback();
-
-    }
-
-}
-
-/* Admin Login */
-function toggleAdmin(){
-
-    let username = prompt("Enter Username:");
-
-    let password = prompt("Enter Password:");
-
-    if(username === "Admin" && password === "123456"){
-
-        adminMode = true;
-
-        alert("Admin Login Successful");
-
-    }
-    else{
-
-        adminMode = false;
-
-        alert("Wrong Username or Password");
-
-    }
-
-    displayFeedback();
-
-}
-
-</script>
 
 </body>
-
 </html>
