@@ -8,9 +8,9 @@ body{
 /* Logo */
 .top-image{
     position:absolute;
-    top:15px;
-    left:15px;
-    width:80px;
+    top:30px;
+    left:30px;
+    width:110px;
     border-radius:10px;
 }
 
